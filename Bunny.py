@@ -9,7 +9,10 @@ class BunnyAPI:
             "Name": name
         }
         request = requests.get(f"http://{self.API_Endpoint_URL}/library/create", data=payload)
-        return request.json()
+        try:
+            return request.json()
+        except:
+            raise ValueError(request.text)
 
     def library_Retrieve(self, id: str):
         request = requests.get(f"http://{self.API_Endpoint_URL}/library/{id}")

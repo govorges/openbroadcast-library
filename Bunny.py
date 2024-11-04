@@ -8,7 +8,7 @@ class BunnyAPI:
         payload = {
             "Name": name
         }
-        request = requests.get(f"http://{self.API_Endpoint_URL}/library/create", headers=headers, json=payload)
+        request = requests.get(f"http://{self.API_Endpoint_URL}/library/create", json=payload)
         try:
             return request.json()
         except:

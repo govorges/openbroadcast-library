@@ -5,13 +5,10 @@ class BunnyAPI:
     def __init__(self):
         self.API_Endpoint_URL = environ["BUNNY_ENDPOINT_ADDRESS"]
     def library_Create(self, name: str):
-        headers = {
-            "Content-Type": "application/json"
-        }
         payload = {
             "Name": name
         }
-        request = requests.get(f"http://{self.API_Endpoint_URL}/library/create", headers=headers, data=payload)
+        request = requests.get(f"http://{self.API_Endpoint_URL}/library/create", headers=headers, json=payload)
         try:
             return request.json()
         except:

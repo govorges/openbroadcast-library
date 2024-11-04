@@ -1,5 +1,6 @@
 from Database import Database
 import datetime
+import json
 
 class LibraryManager:
     def __init__(self) -> None:
@@ -15,7 +16,7 @@ class LibraryManager:
         SET account_metadata = %s
         WHERE google_id = %s;
         """
-        self.database.execute_sql_query(sql_query, args=(user_metadata, google_id))
+        self.database.execute_sql_query(sql_query, args=(json.dumps(user_metadata), google_id))
     
     def create_new_user(self, google_id: str):
         account_metadata = {
@@ -26,7 +27,7 @@ class LibraryManager:
         INSERT INTO public."Users" (google_id, account_metadata)
         VALUES (%s, %s);
         """
-        self.database.execute_sql_query(sql_query, args=(google_id, account_metadata))
+        self.database.execute_sql_query(sql_query, args=(google_id, json.dumps(account_metadata)))
 
     def retrieve_user_by_google_id(self, google_id: str):
         sql_query = f"""

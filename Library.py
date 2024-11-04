@@ -1,4 +1,5 @@
 from Database import Database
+import datetime
 
 class LibraryManager:
     def __init__(self) -> None:
@@ -15,7 +16,17 @@ class LibraryManager:
         WHERE google_id = %s;
         """
         self.database.execute_sql_query(sql_query, args=(user_metadata, google_id))
+    
+    def create_new_user(self, google_id: str):
+        account_metadata = {
+            "date_registered": datetime.datetime.now().timestamp()
+        }
         
+        sql_query = f"""
+        INSERT INTO public."Users" (google_id, account_metadata)
+        VALUES (%s, %s);
+        """
+        self.database.execute_sql_query(sql_query, args=(google_id, account_metadata))
 
     def retrieve_user_by_google_id(self, google_id: str):
         sql_query = f"""

@@ -76,6 +76,10 @@ def register_library():
         ))
     
     user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
+    if user_data is None:
+        api_Library.create_new_user(google_id=accessor)
+        user_data = (None, None, None)
+
     user_metadata = user_data[1]
     if user_metadata.get("library") is not None:
         return jsonify(wkw(

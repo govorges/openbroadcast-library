@@ -37,7 +37,7 @@ def BuildHTTPResponse(
         resp.headers = headers
     else:
         resp.headers.set("Content-Type", "application/json")
-        resp.headers.set("Server", "video")
+        resp.headers.set("Server", "library")
         resp.headers.set("Date", datetime.datetime.now())
         
     data = {

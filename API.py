@@ -107,3 +107,101 @@ def register_library():
         message = f"User registered successfully!",
         message_name = "library_registration_success"
     ))
+
+# 1. Create video object in Bunny.
+# 2. Use created video object's GUID to presign upload auth.
+# 
+@api.route("/library/upload/create", methods=['POST'])
+def createUploadSignature():
+    if request.json is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No JSON Payload provided!",
+            message_name = "no_payload_provided"
+        ))
+    
+    accessor = request.json.get("Accessor")
+    if accessor is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No accessor provided!",
+            message_name = "no_accessor_provided"
+        ))
+    
+    videoId = request.json.get("videoId")
+    if videoId is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No videoId provided!",
+            message_name = "no_videoid_provided"
+        ))
+
+    user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
+    if user_data is None or user_data.get('library') is None:
+        return jsonify(wkw(
+            type = "WARN",
+            message = f"User is not registered!",
+            message_name = "user_not_registered"
+        ))
+    
+    libraryId = user_data['library']
+
+    signature_data = api_Bunny.library_Upload_CreateSignature(libraryId, videoId)
+    if signature_data is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"Upload signature creation failed!",
+            message_name = "signature_creation_failed"
+        ))
+    
+    return jsonify(signature_data)
+    
+@api.route("/library/video/create", methods=['POST'])
+def createVideoObject():
+    if request.json is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No JSON Payload provided!",
+            message_name = "no_payload_provided"
+        ))
+    
+    accessor = request.json.get("Accessor")
+    if accessor is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No accessor provided!",
+            message_name = "no_accessor_provided"
+        ))
+    
+    video_data = request.json.get("video_data")
+    if video_data is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No data provided!",
+            message_name = "no_data_provided"
+        ))
+    if video_data.get("title") is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No title provided!",
+            message_name = "no_title_provided"
+        ))
+    
+    user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
+    if user_data is None or user_data.get('library') is None:
+        return jsonify(wkw(
+            type = "WARN",
+            message = f"User is not registered!",
+            message_name = "user_not_registered"
+        ))
+    
+    libraryId = user_data['library']
+
+    video_data = api_Bunny.library_Video_Create(
+        libraryId = libraryId, 
+        video_data = video_data
+    )
+    return video_data
+    
+
+

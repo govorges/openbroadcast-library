@@ -3,19 +3,29 @@ from os import environ
 
 class BunnyAPI:
     def __init__(self):
-        self.API_Endpoint_URL = environ["BUNNY_ENDPOINT_ADDRESS"]
+        self.API_Endpoint_Address = environ["BUNNY_ENDPOINT_ADDRESS"]
     def library_Create(self, name: str):
         payload = {
             "Name": name
         }
-        request = requests.get(f"http://{self.API_Endpoint_URL}/library/create", json=payload)
+        request = requests.get(f"http://{self.API_Endpoint_Address}/library/create", json=payload)
         return request.json()
 
     def library_Retrieve(self, id: str):
-        request = requests.get(f"http://{self.API_Endpoint_URL}/library/{id}")
+        request = requests.get(f"http://{self.API_Endpoint_Address}/library/{id}")
         return request.json()
     
     def library_Update(self, id: str, payload: dict):
-        request = requests.post(f"http://{self.API_Endpoint_URL}/library/{id}", data=payload)
+        request = requests.post(f"http://{self.API_Endpoint_Address}/library/{id}", json=payload)
         return request.json()
     
+    def library_Upload_CreateSignature(self, libraryId, videoId):
+        request = requests.get(f"http://{self.API_Endpoint_Address}/library/{libraryId}/videos/{videoId}/create_upload_signature")
+        return request.json()
+
+    def library_Video_Create(self, libraryId, video_data: dict):
+        request = requests.post(
+            f"http://{self.API_Endpoint_Address}/library/{libraryId}/videos",
+            data = video_data
+        )
+        return request.json()

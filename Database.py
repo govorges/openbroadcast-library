@@ -44,7 +44,7 @@ class Database:
             database=environ["POSTGRESDB_DATABASE"],
             host=environ["POSTGRESDB_HOST"],
             user=environ["POSTGRESDB_USER"],
-            password=environ["POSTGRES_PASSWORD"],
+            password=environ["POSTGRESDB_PASSWORD"],
             port=environ["POSTGRESDB_DOCKER_PORT"]
         )
         self.postgres_connection.set_session(autocommit=True) # Very important for our use case!

@@ -12,7 +12,7 @@ class LibraryManager:
         user_metadata['library'] = library_id
         
         sql_query = f"""
-        UPDATE public."Users"
+        UPDATE public."UserData"
         SET account_metadata = %s
         WHERE google_id = %s;
         """
@@ -24,14 +24,14 @@ class LibraryManager:
         }
         
         sql_query = f"""
-        INSERT INTO public."Users" (google_id, account_metadata)
+        INSERT INTO public."UserData" (google_id, account_metadata)
         VALUES (%s, %s);
         """
         self.database.execute_sql_query(sql_query, args=(google_id, json.dumps(account_metadata)))
 
     def retrieve_user_by_google_id(self, google_id: str):
         sql_query = f"""
-        SELECT google_id, account_metadata, date_created FROM public."Users" WHERE google_id = %s
+        SELECT google_id, account_metadata, date_created FROM public."UserData" WHERE google_id = %s
         """
         cursor = self.database.execute_sql_query(sql_query, args=(google_id,))
         return cursor.fetchone()

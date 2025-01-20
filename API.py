@@ -88,14 +88,15 @@ def register_library():
             message_name = "user_already_registered"
         ))
 
-    library_creation = api_Bunny.library_Create(name=accessor)
-    if library_creation['message_name'] != "library_creation_success":
+    library_creation_response = api_Bunny.library_Create(name=accessor)
+    try:
+        library = library_creation_response.json()
+    except json.JSONDecodeError:
         return jsonify(wkw(
             type = "FAIL",
             message = f"Error creating library",
             message_name = "library_registration_fail"
         ))
-    library = library_creation['object']
 
     api_Library.associate_library_with_googleid(
         library_id = library['Id'],

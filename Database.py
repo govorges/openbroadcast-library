@@ -56,4 +56,5 @@ class Database:
             pg_cursor.execute(query_string, args)
         else:
             pg_cursor.execute(query_string)
+        self.postgres_connection.commit()
         return pg_cursor

@@ -8,11 +8,13 @@ class BunnyAPI:
         payload = {
             "Name": name
         }
-        request = requests.get(f"http://{self.API_Endpoint_Address}/library/create", json=payload)
-        return request.json()
+        request = requests.post(f"http://{self.API_Endpoint_Address}/videolibrary", json=payload)
+        
+        return request
 
     def library_Retrieve(self, id: str):
-        request = requests.get(f"http://{self.API_Endpoint_Address}/library/{id}")
+        request = requests.get(f"http://{self.API_Endpoint_Address}/videolibrary/{id}")
+        
         return request.json()
     
     def library_Update(self, id: str, payload: dict):

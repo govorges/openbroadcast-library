@@ -109,6 +109,80 @@ def register_library():
         message_name = "library_registration_success"
     ))
 
+@api.route("/library/details", methods=["GET"])
+def library_details():
+    if request.json is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No JSON Payload provided!",
+            message_name = "no_payload_provided"
+        ))
+    
+    accessor = request.json.get("Accessor")
+    if accessor is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No accessor provided!",
+            message_name = "no_accessor_provided"
+        ))
+
+    user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
+    user_metadata = user_data[1]
+
+    return jsonify(user_metadata)
+
+@api.route("/library/collections", methods=['GET'])
+def library_collections():
+    if request.json is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No JSON Payload provided!",
+            message_name = "no_payload_provided"
+        ))
+    
+    accessor = request.json.get("Accessor")
+    if accessor is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No accessor provided!",
+            message_name = "no_accessor_provided"
+        ))
+    
+    user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
+    user_metadata = user_data[1]
+    user_library = user_metadata['library']
+    
+    collections = api_Bunny.library_CollectionsRetrieve(user_library)
+    collections = collections['items']
+
+    return jsonify(collections)
+
+@api.route("/library/videos", methods=['GET'])
+def library_videos():
+    if request.json is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No JSON Payload provided!",
+            message_name = "no_payload_provided"
+        ))
+    
+    accessor = request.json.get("Accessor")
+    if accessor is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No accessor provided!",
+            message_name = "no_accessor_provided"
+        ))
+    
+    user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
+    user_metadata = user_data[1]
+    user_library = user_metadata['library']
+
+    videos = api_Bunny.library_VideosRetrieve(user_library)
+    videos = videos['items']
+
+    return jsonify(videos)
+
 # 1. Create video object in Bunny.
 # 2. Use created video object's GUID to presign upload auth.
 # 

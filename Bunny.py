@@ -17,6 +17,16 @@ class BunnyAPI:
         
         return request.json()
     
+    def library_CollectionsRetrieve(self, id: str):
+        request = requests.get(f"http://{self.API_Endpoint_Address}/library/{id}/collections", json={})
+
+        return request.json()
+    
+    def library_VideosRetrieve(self, id: str):
+        request = requests.get(f"http://{self.API_Endpoint_Address}/library/{id}/videos", json={})
+
+        return request.json()
+    
     def library_Update(self, id: str, payload: dict):
         request = requests.post(f"http://{self.API_Endpoint_Address}/library/{id}", json=payload)
         return request.json()

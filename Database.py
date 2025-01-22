@@ -51,7 +51,12 @@ class Database:
 
     def execute_sql_query(self, query_string: str, args: tuple = None) -> psycopg2.extensions.cursor:
         '''Returns a postgres cursor after executing the provided `query_string`.'''
-        pg_cursor = self.postgres_connection.cursor()
+        try:
+            pg_cursor = self.postgres_connection.cursor()
+        except psycopg2.InterfaceError:
+            self._create_connection()
+            pg_cursor = self.postgres_connection.cursor()
+
         if args is not None:
             pg_cursor.execute(query_string, args)
         else:

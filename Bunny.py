@@ -49,5 +49,20 @@ class BunnyAPI:
                 "name": collection_name
             }
         )
-        
+        return request.json()
+    
+    def library_Collection_Delete(self, libraryId, collection_guid: str):
+        request = requests.delete(
+            f"http://{self.API_Endpoint_Address}/library/{libraryId}/collections/{collection_guid}",
+            json={}
+        )
+        return request.json()
+    
+    def library_Collection_Update(self, libraryId, collection_guid: str, collection_name: str):
+        request = requests.post(
+            f"http://{self.API_Endpoint_Address}/library/{libraryId}/collections/{collection_guid}",
+            json = {
+                "name": collection_name
+            }
+        )
         return request.json()

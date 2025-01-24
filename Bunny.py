@@ -41,3 +41,13 @@ class BunnyAPI:
             data = video_data
         )
         return request.json()
+
+    def library_Collection_Create(self, libraryId, collection_name: str):
+        request = requests.post(
+            f"http://{self.API_Endpoint_Address}/library/{libraryId}/collections",
+            json = {
+                "name": collection_name
+            }
+        )
+        
+        return request.json()

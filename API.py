@@ -157,6 +157,40 @@ def library_collections():
 
     return jsonify(collections)
 
+@api.route('/library/collections/add', methods=['GET'])
+def library_collections_add():
+    if request.json is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No JSON Payload provided!",
+            message_name = "no_payload_provided"
+        ))
+    
+    accessor = request.json.get("Accessor")
+    if accessor is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No accessor provided!",
+            message_name = "no_accessor_provided"
+        ))
+    
+    collection_name = request.json.get("collection_name")
+    if collection_name is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No collection name provided!",
+            message_name = "no_collection_name_provided"
+        ))
+    
+    user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
+    user_metadata = user_data[1]
+    user_library = user_metadata['library']
+
+    collection = api_Bunny.library_Collection_Create(
+        user_library, collection_name=collection_name
+    )
+    return jsonify(collection)
+
 @api.route("/library/videos", methods=['GET'])
 def library_videos():
     if request.json is None:

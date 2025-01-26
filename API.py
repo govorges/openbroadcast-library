@@ -151,7 +151,7 @@ def library_collections():
     user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
     user_metadata = user_data[1]
     user_library = user_metadata['library']
-    
+
     collections = api_Bunny.library_CollectionsRetrieve(user_library)
     collections = collections['items']
 
@@ -322,26 +322,22 @@ def createUploadSignature():
         ))
 
     user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
-    if user_data is None or user_data.get('library') is None:
-        return jsonify(wkw(
-            type = "WARN",
-            message = f"User is not registered!",
-            message_name = "user_not_registered"
-        ))
-    
-    libraryId = user_data['library']
+    user_metadata = user_data[1]
+    user_library = user_metadata['library']
 
-    signature_data = api_Bunny.library_Upload_CreateSignature(libraryId, videoId)
+    signature_data = api_Bunny.library_Upload_CreateSignature(user_library, videoId)
     if signature_data is None:
         return jsonify(wkw(
             type = "FAIL",
             message = f"Upload signature creation failed!",
             message_name = "signature_creation_failed"
         ))
+    signature_data['libraryId'] = user_library
+    signature_data['videoId'] = videoId
     
     return jsonify(signature_data)
     
-@api.route("/library/video/create", methods=['POST'])
+@api.route("/library/videos/create", methods=['POST'])
 def createVideoObject():
     if request.json is None:
         return jsonify(wkw(
@@ -373,17 +369,11 @@ def createVideoObject():
         ))
     
     user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
-    if user_data is None or user_data.get('library') is None:
-        return jsonify(wkw(
-            type = "WARN",
-            message = f"User is not registered!",
-            message_name = "user_not_registered"
-        ))
-    
-    libraryId = user_data['library']
+    user_metadata = user_data[1]
+    user_library = user_metadata['library']
 
     video_data = api_Bunny.library_Video_Create(
-        libraryId = libraryId, 
+        libraryId = user_library, 
         video_data = video_data
     )
     return video_data

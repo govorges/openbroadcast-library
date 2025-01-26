@@ -53,7 +53,7 @@ class Database:
         '''Returns a postgres cursor after executing the provided `query_string`.'''
         try:
             pg_cursor = self.postgres_connection.cursor()
-        except psycopg2.InterfaceError:
+        except psycopg2.InterfaceError or psycopg2.OperationalError:
             self._create_connection()
             pg_cursor = self.postgres_connection.cursor()
 

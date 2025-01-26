@@ -38,7 +38,7 @@ class BunnyAPI:
     def library_Video_Create(self, libraryId, video_data: dict):
         request = requests.post(
             f"http://{self.API_Endpoint_Address}/library/{libraryId}/videos",
-            data = video_data
+            json = video_data
         )
         return request.json()
 

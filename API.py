@@ -15,49 +15,6 @@ api_Library = LibraryManager()
 def wkw(**kwargs):
     return kwargs
 
-def BuildHTTPResponse(
-        headers: dict = None,
-        status_code = 200, **kwargs
-    ):
-
-    type = kwargs.get("type")
-    message = kwargs.get("message")
-    message_name = kwargs.get("message_name")
-
-    route = kwargs.get("route")
-    method = kwargs.get("method")
-
-    object = kwargs.get("object")
-
-
-    resp = make_response()
-    resp.status_code = status_code
-
-    if headers is not None:
-        resp.headers = headers
-    else:
-        resp.headers.set("Content-Type", "application/json")
-        resp.headers.set("Server", "library")
-        resp.headers.set("Date", datetime.datetime.now())
-        
-    data = {
-        "type": type, # Response type
-
-        "message": message, # Response type message
-        "message_name": message_name, # Response data object name (internal)
-
-        "route": route, # Request route
-        "method": method, # Request method
-        
-        "object": object # Response data object
-    }
-
-    resp.set_data(
-        json.dumps(data, indent=4)
-    )
-
-    return resp
-
 @api.route("/library/register", methods=["POST"])
 def register_library():
     if request.json is None:

@@ -61,7 +61,7 @@ def register_library():
     )
 
     return jsonify(wkw(
-        type = "WARN",
+        type = "INFO",
         message = f"User registered successfully!",
         message_name = "library_registration_success"
     ))

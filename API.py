@@ -109,7 +109,7 @@ def library_collections():
     user_metadata = user_data[1]
     user_library = user_metadata['library']
 
-    collections = api_Bunny.library_CollectionsRetrieve(user_library)
+    collections = api_Bunny.library_Collections(user_library)
     collections = collections['items']
 
     return jsonify(collections)
@@ -245,14 +245,37 @@ def library_videos():
     user_metadata = user_data[1]
     user_library = user_metadata['library']
 
-    videos = api_Bunny.library_VideosRetrieve(user_library)
+    videos = api_Bunny.library_Videos(user_library)
     videos = videos['items']
 
     return jsonify(videos)
 
-# 1. Create video object in Bunny.
-# 2. Use created video object's GUID to presign upload auth.
-# 
+@api.route("/library/videos/<videoId>", methods=['GET'])
+def library_videos_retrieve(videoId):
+    if request.json is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No JSON Payload provided!",
+            message_name = "no_payload_provided"
+        ))
+    
+    accessor = request.json.get("Accessor")
+    if accessor is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No accessor provided!",
+            message_name = "no_accessor_provided"
+        ))
+
+    user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
+    user_metadata = user_data[1]
+    user_library = user_metadata['library']
+
+    video = api_Bunny.library_Video_Retrieve(user_library, videoId)
+
+    return jsonify(video)
+
+
 @api.route("/library/upload/create", methods=['POST'])
 def createUploadSignature():
     if request.json is None:

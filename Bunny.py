@@ -17,12 +17,12 @@ class BunnyAPI:
         
         return request.json()
     
-    def library_CollectionsRetrieve(self, id: str):
+    def library_Collections(self, id: str):
         request = requests.get(f"http://{self.API_Endpoint_Address}/library/{id}/collections", json={})
 
         return request.json()
     
-    def library_VideosRetrieve(self, id: str):
+    def library_Videos(self, id: str):
         request = requests.get(f"http://{self.API_Endpoint_Address}/library/{id}/videos", json={})
 
         return request.json()
@@ -64,5 +64,12 @@ class BunnyAPI:
             json = {
                 "name": collection_name
             }
+        )
+        return request.json()
+    
+    def library_Video_Retrieve(self, libraryId, videoId):
+        request = requests.get(
+            f"https://{self.API_Endpoint_Address}/library/{libraryId}/videos/{videoId}",
+            json = {}
         )
         return request.json()

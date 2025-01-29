@@ -69,7 +69,7 @@ class BunnyAPI:
     
     def library_Video_Retrieve(self, libraryId, videoId):
         request = requests.get(
-            f"https://{self.API_Endpoint_Address}/library/{libraryId}/videos/{videoId}",
+            f"http://{self.API_Endpoint_Address}/library/{libraryId}/videos/{videoId}",
             json = {}
         )
         return request.json()

@@ -23,7 +23,7 @@ class BunnyAPI:
         return request.json()
     
     def library_Videos(self, id: str):
-        request = requests.get(f"http://{self.API_Endpoint_Address}/library/{id}/videos", json={})
+        request = requests.get(f"http://{self.API_Endpoint_Address}/library/{id}/videos?itemsPerPage=1000", json={})
 
         return request.json()
     

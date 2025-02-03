@@ -66,28 +66,6 @@ def register_library():
         message_name = "library_registration_success"
     ))
 
-@api.route("/library/details", methods=["GET"])
-def library_details():
-    if request.json is None:
-        return jsonify(wkw(
-            type = "FAIL",
-            message = f"No JSON Payload provided!",
-            message_name = "no_payload_provided"
-        ))
-    
-    accessor = request.json.get("Accessor")
-    if accessor is None:
-        return jsonify(wkw(
-            type = "FAIL",
-            message = f"No accessor provided!",
-            message_name = "no_accessor_provided"
-        ))
-
-    user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
-    user_metadata = user_data[1]
-
-    return jsonify(user_metadata)
-
 @api.route("/library/collections", methods=['GET'])
 def library_collections():
     if request.json is None:
@@ -393,4 +371,30 @@ def updateLibrary():
     )
     return jsonify(update_response)
 
+@api.route("/library/details", methods=['GET'])
+def libraryDetails():
+    if request.json is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No JSON Payload provided!",
+            message_name = "no_payload_provided"
+        ))
+    
+    accessor = request.json.get("Accessor")
+    if accessor is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No accessor provided!",
+            message_name = "no_accessor_provided"
+        ))
+    
+    user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
+    user_metadata = user_data[1]
+    user_library = user_metadata['library']
+    
+    retrieval_response = api_Bunny.library_Retrieve(
+        libraryId = user_library
+    )
+
+    return jsonify(retrieval_response)
 

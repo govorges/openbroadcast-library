@@ -12,9 +12,9 @@ class BunnyAPI:
         
         return request
 
-    def library_Retrieve(self, id: str):
-        request = requests.get(f"http://{self.API_Endpoint_Address}/videolibrary/{id}")
-        
+    def library_Retrieve(self, libraryId: str):
+        request = requests.post(f"http://{self.API_Endpoint_Address}/videolibrary/{libraryId}", json={})
+
         return request.json()
     
     def library_Collections(self, id: str):

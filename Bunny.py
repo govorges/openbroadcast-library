@@ -73,3 +73,10 @@ class BunnyAPI:
             json = {}
         )
         return request.json()
+    
+    def library_Update(self, libraryId, payload):
+        request = requests.post(
+            f"http://{self.API_Endpoint_Address}/videolibrary/{libraryId}",
+            json = payload
+        )
+        return request.json()

@@ -358,5 +358,39 @@ def createVideoObject():
     )
     return video_data
     
+@api.route("/library/update", methods=['POST'])
+def updateLibrary():
+    if request.json is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No JSON Payload provided!",
+            message_name = "no_payload_provided"
+        ))
+    
+    accessor = request.json.get("Accessor")
+    if accessor is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No accessor provided!",
+            message_name = "no_accessor_provided"
+        ))
+    
+    payload = request.json.get("payload")
+    if payload is None:
+        return jsonify(wkw(
+            type = "FAIL",
+            message = f"No data provided!",
+            message_name = "no_data_provided"
+        ))
+    
+    user_data = api_Library.retrieve_user_by_google_id(google_id=accessor)
+    user_metadata = user_data[1]
+    user_library = user_metadata['library']
+    
+    update_response = api_Bunny.library_Update(
+        libraryId = user_library,
+        payload = payload
+    )
+    return jsonify(update_response)
 
 
